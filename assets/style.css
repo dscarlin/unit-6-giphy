@@ -1,0 +1,133 @@
+body{
+	min-width: 300px;
+}
+input, form{
+    
+    width: 100%;
+    margin: auto;
+}
+.pad{
+	padding: 0 15px;
+}
+.header{
+    background-image: url(mountains.jpeg);
+    background-position: center;
+	color: white;
+	text-align: center;
+	padding: 8vw;
+	font-size: 50px;
+	margin-bottom: 2vw;
+	}
+
+.result{
+	margin: 1rem auto 0.5rem;
+	box-shadow: grey .1em .1em .3em .1em;
+	padding: .5em;
+	font-size: 1.1rem;
+	width: 95%;
+
+}
+.result > a{
+	text-decoration: underline;
+	color: #7b340c;
+}
+.result a:hover{
+	color: #4cacff;
+}
+.tile, .result{
+	background: aliceblue;
+}
+.center{
+    margin:auto;
+    width: fit-content;
+}
+#saved{
+    overflow: auto;
+    padding: 0px 1vw;
+    background: #7b340c4a
+/*     padding-top: 5vw */
+}
+.btn-plain{
+	padding:  0 .2em ;
+	border: grey 1px solid;
+	font-size: .8rem
+/* 	box-shadow: unset; */
+}
+.tile .btn-plain{
+	font-size: .4em;
+	margin: .4em .2em;
+}
+#savedGifs{
+    
+/*     position: absolute; */
+/*     left:0; */
+/*     top: 0; */
+    float: left;
+    
+    
+    
+    
+}
+.tile p{
+    margin: 0 0 .4em 0
+}
+.gif{
+    width: 100%;
+/*     height: auto; */
+}
+.card{
+    margin: 0vw 0 3vw;
+    text-align: center;
+    color: #7b340c;
+    min-width: fit-content;
+}
+.card-header{
+    font-size: 2rem;
+    background-size: cover;
+}
+.card-body{
+	background-color: #4cacff3d;
+}
+
+.searchButton{
+    background: aliceblue;
+    margin: 2vw;
+    box-shadow: .1em .1em .1em .1em
+}
+.small{
+    font-size: 1rem;
+}
+#buttons .btn:focus{
+    box-shadow: .1em .1em .1em .1em
+/*     border: inset .1em;
+    border-radius: .4em; */
+}
+.btn:focus{
+	box-shadow: none;
+}
+.tile{
+	display: inline-block;
+    margin: 1em;
+    margin-left: 3vw;
+    font-size: .5rem;
+    box-shadow: grey .3em .3em .5em .1em;
+    padding: 1vw 1vw 0;
+    border: solid .001em;
+
+/*         padding-bottom: 3em; */
+        
+} 
+.save button, .download button, .remove button{
+	font-size: 1vh;
+	margin: 1em .3em 1em;
+}
+.article-btn{
+/* 	margin-top: .6rem;
+	float: left; */
+	font-size: .4rem;
+	display: block;
+
+}
+.save, .download, .remove{
+	text-decoration: unset;
+}

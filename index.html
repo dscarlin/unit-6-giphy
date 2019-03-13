@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="screen" href="assets/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="assets/main.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row pad">
+            <div class="header col-lg-12">
+                <h1 id="headerTitle">New York Times Search</h1>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <button id="savedGifs" class="btn btn-plain">
+                            Favorites
+                        </button>
+                        <div id="buttonTitle" class="center">
+                            Search Buttons
+                        </div>
+                    </div>
+                    <div class="card-body" id="saved"></div>
+                    <div id="buttons" class="card-body"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+             <div id="float" class="col-sm-12 col-md-4">
+                <div class="card">
+                    <div class="card-header text-center small">
+                            Create a Button of your choice!
+                        </div>
+                    <div class="card-body">
+                        <form autocomplete="off">
+                            <div class="form-group">
+                                <input type="text" id="input">
+                                <input type="submit" id="submit" class="btn btn-plain" value="Create Search Button">
+                                <input type="submit" id="removeButton" class="btn btn-plain" value="Remove Button">
+                                <input type="submit" id="resetButtons" class="btn btn-plain" value="Reset Default Buttons">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header text-center">
+                        Results
+                    </div>
+                    <div class="card-body contianer">
+                        <div id="results" class="row">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+    </div>
+</body>
+</html>
