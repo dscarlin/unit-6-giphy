@@ -6,9 +6,7 @@ input, form{
     width: 100%;
     margin: auto;
 }
-.pad{
-	padding: 0 15px;
-}
+
 .header{
     background-image: url(mountains.jpeg);
     background-position: center;
@@ -58,15 +56,7 @@ input, form{
 	margin: .4em .2em;
 }
 #savedGifs{
-    
-/*     position: absolute; */
-/*     left:0; */
-/*     top: 0; */
-    float: left;
-    
-    
-    
-    
+    float: left;  
 }
 .tile p{
     margin: 0 0 .4em 0
@@ -92,19 +82,20 @@ input, form{
 .searchButton{
     background: aliceblue;
     margin: 2vw;
-    box-shadow: .1em .1em .1em .1em
+    box-shadow: .1em .1em 1em .1em;
+    border: solid 1px
 }
 .small{
     font-size: 1rem;
 }
-#buttons .btn:focus{
-    box-shadow: .1em .1em .1em .1em
+.searchButton:focus{
+    box-shadow: .1em .1em 1em .1em
 /*     border: inset .1em;
     border-radius: .4em; */
 }
-.btn:focus{
+/* .btn:focus{
 	box-shadow: none;
-}
+} */
 .tile{
 	display: inline-block;
     margin: 1em;
@@ -130,4 +121,12 @@ input, form{
 }
 .save, .download, .remove{
 	text-decoration: unset;
+}
+input{
+	background: aliceblue;
+}
+input:not(#input){
+	margin-top: 1rem;
+	max-width: 10rem;
+	display: block;
 }

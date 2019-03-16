@@ -2,21 +2,24 @@
 
 
 
-$(document).ready(selectApi);
-var $buttons, $results, $input, $submit, $headerTitle, subjectArray, favoritesArray, apiObject,
-searchTerm, selectedSearchTerm, selsctedObject, updateSelect, offset = 0, $saved, favoritesOpen = false;
+$(document).ready(plugInApis);
+var $buttons, $results, $input, $submit, $headerTitle, subjectArray, favoritesArray, apiObject, apiButtonsMade, tileLocalArray, tileLocalArrayIndex,
+buttonLocalArray, buttonLocalArrayIndex, clickHandlersOn, searchTerm, selectedSearchTerm, selsctedObject, updateSelect, offset = 0, $saved, favoritesOpen = false;
 
 
-function selectApi(){
+function plugInApis(){
     defineApiVariables();
     makeApiSelectButtons();
-    clickApiSelectButton(setPage);
+    clickApiSelectButton(defineApiVariables, setPage);
 }
 
 function setPage(){
+    
     defineVariables();
     $saved.start();
     makeSearchButtons();
+    if (clickHandlersOn)
+        return;
     addSearchButton();
     removeLastButton();
     resetDefaultSearchButtons();
@@ -26,6 +29,8 @@ function setPage(){
     clickDownload();
     clickFavorites();
     clickRemove();
+    clickHandlersOn = true;
+    
 }
 function defineApiVariables(){
     apiObject = {
@@ -54,30 +59,35 @@ function defineApiVariables(){
             displayKey: 'results'
         }
     }
-    $buttons = $('#buttons');
-    $form = $('form')
-    $headerTitle = $('#headerTitle').text('Welcome to Your News and Entertainment Collection App')
 }
     
 
 function makeApiSelectButtons(){
+    $results = $('#results');
+    $apiButtons = $('#apiButtons');
+    $form = $('form');
+    $buttons = $('#buttons');
+    $headerTitle = $('#headerTitle').text('Welcome to Your News and Entertainment Collection App');
+    apiButtonsMade = false;
     for (key in apiObject){
-       console.log(key)
-       console.log(key.name)
-        makeButton(apiObject[key].name)
-    }
+        makeButton(apiObject[key].name)  
+    };
+    apiButtonsMade = true;
+    
 }
 
-function clickApiSelectButton(callback){
+function clickApiSelectButton(callback1, callback2){
     $form.on('click','#submit, #removeButton, #resetButtons', function(e){
         e.preventDefault()
     })
-    $(document).one('click','.searchButton',function(){
+    $apiButtons.on('click','.searchButton',function(){
         for(key in apiObject ){
             if ($(this).attr('data-name') == apiObject[key].name){
                 updateSelect = key;
                 selectedObject = apiObject[key];
-                callback();  
+                $results.empty();
+                callback1();
+                callback2();  
             }    
         }
     })
@@ -94,7 +104,7 @@ function defineVariables(){
                 $saved.name.attr('style','height:0');
         },
         hide: function(){
-                $saved.name.animate({height: 0},500);
+                $saved.name.animate({height: 0},400);
         },
         show: function(){
                 $saved.name.animate({height: 400}, 500);
@@ -102,7 +112,7 @@ function defineVariables(){
     }
     var favorites = localStorage.getItem(selectedObject.favorites);
     $saved.name.html(favorites);
-    $results = $('#results');
+   
     $submit = $('#sumbit');
     subjectArray = selectedObject.stockButtons;
 }
@@ -113,14 +123,15 @@ function makeSearchButtons(){
 }
 
 function makeButton(input){
-   $('<button>').attr({'data-name' :input,'class': 'btn searchButton'}).text(input).appendTo($buttons)
+    var container = (apiButtonsMade) ? $buttons : $apiButtons;
+    $('<button>').attr({'data-name' :input,'class': 'btn searchButton'}).text(input).appendTo(container)
 }
 
 function addSearchButton(){ 
     $form.on('click', '#submit', function(e){
         $input = $('#input');
         // subjectArray.push($input.val());
-        makeButton($input.val());
+        makeButton($input.val().trim());
         $input.val('')
     })
 }
@@ -142,7 +153,7 @@ function clickSearchButton(){
     $buttons.on('click','.searchButton', queryAPI);
 }
 
-function queryAPI(callback){
+function queryAPI(){
     
     searchTerm = $(this).attr('data-name').toLowerCase();
     if (selectedSearchTerm == searchTerm){
@@ -153,6 +164,7 @@ function queryAPI(callback){
         $results.empty();
     }
     defineApiVariables()
+    $("body").css("cursor", "progress");
     selectedObject = apiObject[updateSelect]
     var url = selectedObject.url;
     $.ajax({url: url, method:'GET'})
@@ -161,6 +173,7 @@ function queryAPI(callback){
 }
 
 function displayResult(response){
+    $("body").css("cursor", "default");
     console.log(response);
     if (selectedObject.name == "Giphy")
         response[selectedObject.displayKey].forEach(makeAndDisplayTile)
@@ -172,7 +185,7 @@ function displayResult(response){
 function makeAndDisplayArticleTile(article){
     // console.log(this)
     var save = $('<a>').addClass('save').append($('<button>').addClass('btn btn-plain article-btn').text('Favorites'));
-    $('<div>').addClass('result').append($('<a>').attr({href: article.url, target: "_blank"}).text(article.title),save).prependTo($results);
+    $('<div>').addClass('result col-sm-12').append($('<a>').attr({href: article.url, target: "_blank"}).text(article.title),save).prependTo($results);
 }
 
 
@@ -185,8 +198,8 @@ function makeAndDisplayTile(gif){
     var rating = $('<p>').text("Rating: " + gif.rating);
     var title = $('<p>').text("Title: " + gif.title);
     var save = $('<a>').addClass('save').append($('<button>').text('Favorites'))
-    var download = $('<a>').addClass('download').attr({'data-link': animateUrl,'download': title}).append($('<button>').text('Download'))
-    $('<div>').addClass('tile col-sm-5 col-md-3').append(image, title, rating, download, save).prependTo($results);
+    var download = $('<a>').addClass('download').attr({'href' : gif.images.original.url,'data-link': animateUrl,'download':'giphy.gif' }).append($('<button>').text('Download'))
+        $('<div>').addClass('tile col-sm-5 col-md-3').append(image, title, rating, download, save).prependTo($results);
 }
 
 function clickGif(){
@@ -207,38 +220,60 @@ function toggleGifAnimate(){
 
 function clickDownload(){
     var $tile = $('.tile')
-    $(document).on('click','.download', function(e){
+    $(document).on('click','.download', function(){
         // e.preventDefault()
         var $this = $(this)
         
-        var href = $this.attr('data-link');
-        $this.attr('href', href);
+        // var href = $this.attr('data-link');
+        // $this.attr('href', href);
         // var name = $this.attr('download')
         // download(name, href);
        
-        console.log($(this).attr('value'))
+        console.log($(this).attr())
     })
 }
 function clickFavorites(){
-    $results.on('click', '.save', function(){
+    $results.on('click', '.save', function(e){
+        e.preventDefault()
         $this = $(this)
         var inStorage = (localStorage.getItem(selectedObject.favorites) == null) ? "" : localStorage.getItem(selectedObject.favorites);
         $this.contents().text('Remove')
         $this.attr('class','remove')
-        $this.parent().animate({top:-400},500);
-        if (inStorage.indexOf($this.parent().html())>=0){
-            $this.contents().text('Favorites');
-            $this.attr('class','save');
-            $this.parent().off().animate({top:0},200);
-            return;
+        var windowLoc = $(window).scrollTop()
+        var windowOffset = $('#buttonTitle').offset().top
+        var offset = $('#saved').offset().top
+        var extend = $this.offset().top-$this.parent().height();
+
+        $this.parent().stop().animate({top: -(extend-(.4*offset))}, 1.1*windowLoc+300); //1500
+        $htmlBody = $("html, body")
+        //check if saved container is in viewport and if it is  thenn donot scroll
+        if (windowLoc > offset){
+            setTimeout(function(){
+            $htmlBody.animate({ scrollTop: windowOffset-0.5*offset }, windowLoc+200) //1900
+            }, 200);
         }
-        $saved.show();
+        // if (inStorage.indexOf($this.parent().html())>=0){
+        //     $this.parent().attr('style','display:none')
+        //     clearTimeout(scroll);
+        //     return;
+        // }
         setTimeout(function(){
-            $this.parent().remove().prependTo($saved.name)
-            $this.parent().attr('style','top:0');
-            updateLocalStorage();
-        },600);
-        setTimeout($saved.hide, 500);
+            $saved.show();
+        }, windowLoc-300); //1800
+       
+        setTimeout(function(){
+            $('#saved .result').animate({top: $this.parent().height()}, 200)
+            // var pad = $('<div>').attr('style',' height:'+$this.parent().height()+'px;  background: blue; width: 50px;').prependTo($saved.name)
+            setTimeout(function(){
+                $('#saved .result').css('top', '0')
+
+                $this.parent().remove().prependTo($saved.name)
+                $this.parent().attr('style','top:0');
+                updateLocalStorage();
+             },400)
+        }, 1.2*windowLoc+200); //1800
+        setTimeout($saved.hide, 1.2*windowLoc+1000); //2100
+        setTimeout(function(){$(window).scrollTop(windowLoc-$this.height())}, 1.7*windowLoc+800) //2700
     })
 }
 
